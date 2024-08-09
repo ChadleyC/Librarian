@@ -1,21 +1,24 @@
-﻿using System;
-using System.Linq.Expressions;
-using JsonFlatFileDataStore;
+﻿using JsonFlatFileDataStore;
 using SupportWave.Librarian.Data.Models;
 
 namespace SupportWave.Librarian.Data
 {
-	public class BookRepository : IRepository<Book, Guid>
-	{
-		JsonFlatFileDataStore.DataStore _store;
+    public class BookRepository : IRepository<Book, Guid>
+    {
+        IDataStore _store;
 
-		public BookRepository()
-		{
-            _store = new DataStore("book.json");
+        public BookRepository(IDataStore dataStore)
+        {
+            _store = dataStore; //new DataStore("www/book.json");
         }
 
-		private IDocumentCollection<Book> GetBookCollection()
-			=> _store.GetCollection<Book>();
+        ~BookRepository()
+        {
+            _store.Dispose();
+        }
+
+        private IDocumentCollection<Book> GetBookCollection()
+            => _store.GetCollection<Book>();
 
         /// <summary>
         /// Gets book by Id, if does not exist it will return null
@@ -23,9 +26,9 @@ namespace SupportWave.Librarian.Data
         /// <param name="id"></param>
         /// <returns>Book <see cref="Book"/></returns>
         public Book? Get(Guid id)
-		{
-			return GetBookCollection().AsQueryable().FirstOrDefault(x => x.Id.Equals(id));
-		}
+        {
+            return GetBookCollection().AsQueryable().FirstOrDefault(x => x.BookId.Equals(id));
+        }
 
         /// <summary>
         /// Inserts a book asynchronously, if it fails it will return null
@@ -33,29 +36,25 @@ namespace SupportWave.Librarian.Data
         /// <param name="book"></param>
         /// <returns>Book <see cref="Book"/></returns>
         public async Task<Book?> InsertAsync(Book book)
-		{
-			if (await GetBookCollection().InsertOneAsync(book))
-			{
-				return Get(book.Id);
-			}
-
-			return null;
+        {
+            return await GetBookCollection().InsertOneAsync(book) ? Get(book.BookId) : null;
         }
 
         /// <summary>
         /// Updates a book asynchronously, returns null if fails
         /// </summary>
         /// <param name="book"></param>
+        /// <param name="id"></param>
         /// <returns>Book <see cref="Book"/></returns>
         public async Task<Book?> UpdateAsync(Guid id, Book book)
         {
-	        var existingBook = Get(id);
-			if (existingBook is not null && await GetBookCollection().UpdateOneAsync(book.Id, book))
-			{
-				return Get(book.Id);
-			}
+            var existingBook = Get(id);
+            if (existingBook is not null && await GetBookCollection().UpdateOneAsync(book.Id, book))
+            {
+                return Get(book.BookId);
+            }
 
-			return null;
+            return null;
         }
 
         /// <summary>
@@ -64,9 +63,10 @@ namespace SupportWave.Librarian.Data
         /// <param name="id">This is a guid that exists on the book model</param>
         /// <returns>boolean stating whether successful or not</returns>
         public async Task<bool> DeleteAsync(Guid id)
-		{
-			return await GetBookCollection().DeleteOneAsync(id);
-		}
+        {
+            var book = Get(id);
+            return await GetBookCollection().DeleteOneAsync(book?.Id);
+        }
 
         /// <summary>
         /// Returns all books in collection
@@ -88,4 +88,3 @@ namespace SupportWave.Librarian.Data
         }
     }
 }
-

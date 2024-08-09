@@ -44,7 +44,7 @@ namespace SupportWave.Librarian.Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]BookModel value)
+        public async Task<IActionResult> Post([FromBody]InsertBookModel value)
         {
             if (!ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace SupportWave.Librarian.Api.Controllers
 
             var deleted = await this._bookService.Delete(id);
 
-            return deleted ? Ok() : 
+            return deleted ? Json(true) : 
                 Json(new LibrarianException(System.Net.HttpStatusCode.BadRequest,
                 "Error deleting book, please try again", 
                 "Check if book exists and try again", 

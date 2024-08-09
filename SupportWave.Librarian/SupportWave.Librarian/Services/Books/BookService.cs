@@ -1,5 +1,4 @@
-﻿using System;
-using SupportWave.Librarian.Api.Models;
+﻿using SupportWave.Librarian.Api.Models;
 using SupportWave.Librarian.Data;
 using SupportWave.Librarian.Data.Models;
 
