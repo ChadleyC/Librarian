@@ -49,12 +49,13 @@ namespace SupportWave.Librarian.Data
         public async Task<Book?> UpdateAsync(Guid id, Book book)
         {
             var existingBook = Get(id);
-            if (existingBook is not null && await GetBookCollection().UpdateOneAsync(book.Id, book))
+            if (existingBook is null)
             {
-                return Get(book.BookId);
+                return null;
             }
-
-            return null;
+            existingBook.Update(book);
+            await GetBookCollection().UpdateOneAsync(existingBook.Id, existingBook);
+            return Get(existingBook.BookId);
         }
 
         /// <summary>

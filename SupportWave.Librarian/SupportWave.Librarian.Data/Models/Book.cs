@@ -12,6 +12,19 @@
 			this.PublishedDate = publishedDate;
 			this.Isbn = isbn;
 		}
+
+		public void Update(Book? newBook)
+		{
+			if (newBook is null)
+			{
+				return;
+			}
+
+			this.Title = newBook.Title;
+			this.Author = newBook.Author;
+			this.PublishedDate = newBook.PublishedDate;
+			this.Isbn = newBook.Isbn;
+		}
 		
 		public int Id { get; set; }
 		public Guid BookId { get; set; }

@@ -1,0 +1,59 @@
+@model List<BookModel>
+
+@{
+    Layout = "_Layout";
+    var isPlural = @Model?.Count > 1;
+}
+
+<table id="BooksTable" class="table table-responsive table-hover">
+    @if (Model?.Any() ?? false)
+    {
+        
+        <caption>@Model.Count Book@(isPlural ? "s" : "") in library</caption>
+    }
+    else
+    {
+        <caption>No Books in library</caption>
+    }
+    <thead>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Published Date</th>
+    <th>ISBN</th>
+    <th>Action</th>
+    </thead>
+    <tbody>
+    @if (Model?.Any() ?? false)
+    {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Author</td>
+                <td>@item.PublishedDate?.ToShortDateString()</td>
+                <td>@item.Isbn</td>
+                <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">@Html.ActionLink("Edit Book", "Edit", new { id = item.Id }, new { @class = "dropdown-item" })</a></li>
+                        <li><a class="dropdown-item" href="#">@Html.ActionLink("Delete Book", "Delete", new { id = item.Id }, new { @class = "dropdown-item" })</a></li>
+                      </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+    $(function() {
+        $('#BooksTable').DataTable();
+    });
+    </script>
+}

@@ -1,0 +1,55 @@
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model BookModel
+
+@{
+    Layout = "_Layout";
+}
+
+@if (ViewBag.OperationErrorMessage is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.OperationErrorMessage
+    </div>
+}
+
+@if (ViewBag.Errors != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Error saving</h4>
+        <p>Please see below validation errors</p>
+        <hr>
+        @foreach (var item in (ViewBag.Errors as ModelStateDictionary ?? new ModelStateDictionary()).Where(x => x.Value.Errors.Any()).SelectMany(x => x.Value.Errors))
+        {
+            <p class="mb-0">@item.ErrorMessage</p>
+        }
+    </div>
+}
+
+@using (Html.BeginForm("Add", "Book", null, FormMethod.Post, true, new { @class = "form" }))
+{
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input required="required" type="text" class="form-control" id="Title" aria-describedby="titleHelp" placeholder="Enter Title" name="Title" value="@Model.Title">
+        <small id="titleHelp" class="form-text text-muted">Title of the book you are adding</small>
+    </div>
+
+    <div class="form-group">
+        <label for="Author">Author</label>
+        <input required="required" type="text" class="form-control" id="Author" aria-describedby="emailHelp" placeholder="Enter Author" name="Author" value="@Model.Author">
+        <small id="emailHelp" class="form-text text-muted">Author of the book you are adding</small>
+    </div>
+
+    <div class="form-group">
+        <label for="PublishedDate">Published Date</label>
+        <input type="date" class="form-control" id="PublishedDate" aria-describedby="publishedHelp" placeholder="Enter Published Date" name="PublishedDate" value="@Model.PublishedDate">
+        <small id="publishedHelp" class="form-text text-muted">Date that the book was published, (optional)</small>
+    </div>
+
+    <div class="form-group">
+        <label for="ISBN">ISBN</label>
+        <input required="required" type="text" class="form-control" id="ISBN" aria-describedby="isbnHelp" placeholder="Enter ISBN" name="Isbn" value="@Model.Isbn">
+        <small id="isbnHelp" class="form-text text-muted">International Standard Book Number of the book being added</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Book</button>
+}

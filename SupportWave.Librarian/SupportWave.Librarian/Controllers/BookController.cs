@@ -17,14 +17,18 @@ namespace SupportWave.Librarian.Api.Controllers
             this._bookService = bookService;
         }
 
-        // GET: api/values
+        [HttpGet("Search")]
+        public IActionResult Get(string title, string author)
+        {
+            return Json(this._bookService.Search(title, author));
+        }
+        
         [HttpGet]
         public IActionResult Get()
         {
             return Json(this._bookService.GetAll());
         }
-
-        // GET api/values/5
+        
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
@@ -42,7 +46,6 @@ namespace SupportWave.Librarian.Api.Controllers
             return result is null? Json(new LibrarianException(System.Net.HttpStatusCode.NotFound, "Book does not exist", null, id)) : Json(result);
         }
 
-        // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]InsertBookModel value)
         {
@@ -58,7 +61,6 @@ namespace SupportWave.Librarian.Api.Controllers
                 Json(result);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody]BookModel value)
         {
@@ -79,7 +81,6 @@ namespace SupportWave.Librarian.Api.Controllers
                 Json(result);           
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
