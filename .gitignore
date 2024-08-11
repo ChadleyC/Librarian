@@ -9,3 +9,7 @@ SupportWave.Librarian/SupportWave.Librarian.Tests/obj
 SupportWave.Librarian/SupportWave.Librarian.Tests/bin/
 
 SupportWave.Librarian/SupportWave.Librarian/www/books.json
+
+SupportWave.Librarian/SupportWave.Librarian.Web/MVC/Librarian.UI/Librarian.UI/obj/
+
+SupportWave.Librarian/SupportWave.Librarian.Web/MVC/Librarian.UI/.idea/
