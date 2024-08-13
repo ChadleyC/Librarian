@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SupportWave.Librarian.Data\SupportWave.Librarian.Data.csproj" />
     <ProjectReference Include="..\SupportWave.Librarian\SupportWave.Librarian.Api.csproj" />
   </ItemGroup>
